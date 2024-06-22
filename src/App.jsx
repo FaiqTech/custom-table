@@ -3,14 +3,14 @@ import Table from "./components/table/Table";
 import data from "../db.json";
 import "./App.scss";
 
-const tableInfo = (data) => {
+const getTableInfo = (data) => {
   const columns = data.filter((item) => item.place === "top");
   const rows = data.filter((item) => item.place === "left");
   return { columns, rows };
 };
 
 const App = () => {
-  const { columns, rows } = tableInfo(data);
+  const { columns, rows } = getTableInfo(data);
 
   return (
     <div className="App">
