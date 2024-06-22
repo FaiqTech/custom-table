@@ -5,7 +5,17 @@ const showChildren = (children, level = 1) => {
   return children.map((child) => (
     <React.Fragment key={child.id}>
       <tr>
-        <td style={{ paddingLeft: `${level * 20}px` }}>{child.name}</td>
+        <td
+          style={{
+            paddingLeft: `${level * 20}px`,
+            fontWeight: child.font_weight,
+            fontStyle: child.font_style,
+            textAlign: child.text_align,
+            fontSize: `${child.font_size}px`,
+          }}
+        >
+          {child.name}
+        </td>
         <td colSpan={4}></td>
       </tr>
       {child.children && child.children.length > 0
@@ -22,7 +32,17 @@ const Table = ({ columns, rows }) => {
         <tr>
           <th></th>
           {columns.map((col) => (
-            <th key={col.id}>{col.name}</th>
+            <th
+              key={col.id}
+              style={{
+                fontWeight: col.font_weight,
+                fontStyle: col.font_style,
+                textAlign: col.text_align,
+                fontSize: `${col.font_size}px`,
+              }}
+            >
+              {col.name}
+            </th>
           ))}
         </tr>
       </thead>
@@ -30,7 +50,16 @@ const Table = ({ columns, rows }) => {
         {rows.map((row) => (
           <React.Fragment key={row.id}>
             <tr>
-              <td>{row.name}</td>
+              <td
+                style={{
+                  fontWeight: row.font_weight,
+                  fontStyle: row.font_style,
+                  textAlign: row.text_align,
+                  fontSize: `${row.font_size}px`,
+                }}
+              >
+                {row.name}
+              </td>
               {columns.map((col) => (
                 <td key={`${row.id}-${col.id}`}>
                   {row.name} - {col.name}
