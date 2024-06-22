@@ -1,3 +1,4 @@
+import React from "react";
 import Table from "./components/table/Table";
 import data from "../db.json";
 import "./App.scss";

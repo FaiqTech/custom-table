@@ -1,77 +1,48 @@
 import React from "react";
 import "./table.scss";
 
-const showChildren = (children, level = 1) => {
-  return children.map((child) => (
-    <React.Fragment key={child.id}>
-      <tr>
-        <td
-          style={{
-            paddingLeft: `${level * 20}px`,
-            fontWeight: child.font_weight,
-            fontStyle: child.font_style,
-            textAlign: child.text_align,
-            fontSize: `${child.font_size}px`,
-          }}
-        >
-          {child.name}
-        </td>
-        <td colSpan={4}></td>
-      </tr>
-      {child.children && child.children.length > 0
-        ? showChildren(child.children, level + 1)
-        : null}
-    </React.Fragment>
-  ));
-};
+const renderCell = (
+  { name, font_weight, font_style, text_align, font_size },
+  colSpan = 1,
+  paddingLeft = 0
+) => (
+  <td
+    colSpan={colSpan}
+    style={{
+      paddingLeft: `${paddingLeft}px`,
+      fontWeight: font_weight,
+      fontStyle: font_style,
+      textAlign: text_align,
+      fontSize: `${font_size}px`,
+    }}
+  >
+    {name}
+  </td>
+);
 
-const Table = ({ columns, rows }) => {
-  return (
-    <table className="custom-table">
-      <thead>
-        <tr>
-          <th></th>
-          {columns.map((col) => (
-            <th
-              key={col.id}
-              style={{
-                fontWeight: col.font_weight,
-                fontStyle: col.font_style,
-                textAlign: col.text_align,
-                fontSize: `${col.font_size}px`,
-              }}
-            >
-              {col.name}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row) => (
-          <React.Fragment key={row.id}>
-            <tr>
-              <td
-                style={{
-                  fontWeight: row.font_weight,
-                  fontStyle: row.font_style,
-                  textAlign: row.text_align,
-                  fontSize: `${row.font_size}px`,
-                }}
-              >
-                {row.name}
-              </td>
-              {columns.map((col) => (
-                <td key={`${row.id}-${col.id}`}>
-                  {row.name} - {col.name}
-                </td>
-              ))}
-            </tr>
-            {row.children && showChildren(row.children)}
-          </React.Fragment>
-        ))}
-      </tbody>
-    </table>
-  );
-};
+const renderRow = (row, columns, level = 1) => (
+  <>
+    <tr key={row.id}>
+      {renderCell(row, 1, level * 20)}
+      {columns.map((col) =>
+        renderCell({ ...col, name: `${row.name} - ${col.name}` }, 1, 0)
+      )}
+    </tr>
+    {row.children &&
+      row.children.map((child) => renderRow(child, columns, level + 1))}
+  </>
+);
+
+const Table = ({ columns, rows }) => (
+  <table className="custom-table">
+    <thead>
+      <tr>
+        <th></th>
+        {columns.map((col) => renderCell(col))}
+      </tr>
+    </thead>
+    <tbody>{rows.map((row) => renderRow(row, columns))}</tbody>
+  </table>
+);
 
 export default Table;
